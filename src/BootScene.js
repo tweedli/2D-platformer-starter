@@ -8,7 +8,9 @@ class BootScene extends Phaser.Scene {
     {
         this.load.image('background-clouds', 'assets/images/clouds.png'); // 16-bit later
         // Tilemap with a lot of objects and tile-properties tricks
-        this.load.tilemapTiledJSON('map', 'assets/tilemaps/super-mario.json');
+
+        this.load.spritesheet('gun-bullet', 'assets/images/gun-bullet.png', { frameWidth: 8, frameHeight:8 })
+        
         // I load the tiles as a spritesheet so I can use it for both sprites and tiles
         this.load.spritesheet('tiles', 'assets/images/super-mario.png', { frameWidth: 16, frameHeight: 16 });
         // Just for fun:

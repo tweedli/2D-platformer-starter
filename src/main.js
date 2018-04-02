@@ -1,26 +1,26 @@
 import 'phaser';
 import BootScene from './BootScene';
-import MarioBrosScene from './MarioBrosScene';
+import OverWorldScene from './OverWorldScene';
 import TitleScene from './TitleScene';
 
 
 let config = {
     type: Phaser.WEBGL,
     parent: 'content',
-    width: 400,
-    height: 240,
+    width: 800,
+    height: 480,
     scaleMode: 0, //Phaser.ScaleManager.EXACT_FIT,
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 800 },
+            gravity: { y: 500 },
             debug: false
         }
     },
     scene: [
         BootScene,
         TitleScene,
-        MarioBrosScene,
+        OverWorldScene,
     ]
 };
 

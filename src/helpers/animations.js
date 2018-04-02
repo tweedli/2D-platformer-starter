@@ -165,6 +165,12 @@ export default function makeAnimations(scene) {
     scene.anims.create(config);
 
     config = {
+        key: 'bullet',
+        frames: scene.anims.generateFrameNumbers('sprites16', { start: 1, end: 1 }),
+    };
+    scene.anims.create(config);
+
+    config = {
         key: 'star',
         frames: scene.anims.generateFrameNumbers('sprites16', { start: 1, end: 1 }),
     };

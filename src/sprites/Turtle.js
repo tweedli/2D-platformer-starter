@@ -56,7 +56,7 @@ export default class Turtle extends Enemy {
 
     if (enemy.verticalHit(enemy, mario)) {
       // get points
-      enemy.scene.updateScore(100);
+      // enemy.scene.updateScore(100);
       if (!enemy.sliding || (enemy.sliding && enemy.body.velocity.x === 0)) {
         enemy.scene.sound.playAudioSprite('sfx', 'smb_kick');
         //enemy.body.height = 16;
