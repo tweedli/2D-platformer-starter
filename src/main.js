@@ -9,6 +9,7 @@ let config = {
     parent: 'content',
     width: 800,
     height: 480,
+    // pixelArt:true,
     scaleMode: 0, //Phaser.ScaleManager.EXACT_FIT,
     physics: {
         default: 'arcade',

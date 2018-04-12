@@ -1,12 +1,12 @@
 import Mario from './sprites/Mario'
-import Goomba from './sprites/Goomba'
-import Turtle from './sprites/Turtle'
+import Enemy from './sprites/Enemy'
 import PowerUp from './sprites/PowerUp'
 import Projectile from './Projectile'
 import SMBTileSprite from './sprites/SMBTileSprite'
 import makeAnimations from './helpers/animations'
 import AnimatedTiles from 'phaser-animated-tiles'
 import worlds from './worlds'
+import enemies from './enemies'
 
 class OverWorldScene extends Phaser.Scene {
   constructor(config) {
@@ -28,16 +28,19 @@ class OverWorldScene extends Phaser.Scene {
     console.log(this.worldName)
 
     // for now we are loading this one
-    this.load.tilemapTiledJSON(this.worldName, 'assets/tilemaps/' + this.worldName + '.json');
+    this.load.tilemapTiledJSON(this.worldName, 'assets/tilemaps/' + this.worldName + '.json')
 
     this.leftNeighbor  = worlds[this.worldName].leftNeighbor
     this.rightNeighbor = worlds[this.worldName].rightNeighbor
+
+    this.pixelArt = true
 
   }
 
   create() {
     console.log(this)
-    this.cleanUp(); // necessary??
+    console.log("cleaning up")
+    // this.cleanUp(); // necessary??
     console.log(this)
 
     // console.log(this)
@@ -121,9 +124,8 @@ class OverWorldScene extends Phaser.Scene {
     this.gfx = this.add.graphics(0,0)
 
     
-
     // This group contains all enemies for collision and calling update-methods
-    this.enemyGroup = this.add.group();
+    this.enemyGroup = this.add.group()
 
     // The map has one object layer with enemies as stamped tiles, 
     // each tile has properties containing info on what enemy it represents.
@@ -136,41 +138,44 @@ class OverWorldScene extends Phaser.Scene {
       // (enemy) => {
       // worlds.enemies
         // let enemyObject;
+    for(let enemy in worlds[this.worldName].enemies){
+        for(let i = 0; i < worlds[this.worldName].enemies[enemy]; i++){
 
-        
-    // for(let enemy in worlds[this.worldName].enemies){
-    //     for(let i = 0; i < worlds[this.worldName].enemies[enemy]; i++){
-
-    //     switch (enemy) {
-    //       case "goomba":
-    //           this.enemyGroup.add(new Goomba({
-    //             scene: this,
-    //             key: 'sprites16',
-    //             x: Math.random() * this.groundLayer.width,
-    //             y: Math.random() * this.groundLayer.height - 16
-    //           }))
-    //         // }
-    // //         // enemyObject = new Goomba({
-    // //         //   scene: this,
-    // //         //   key: 'sprites16',
-    // //         //   x: enemy.x,
-    // //         //   y: enemy.y
-    // //         // });
-    //         break
-    //       case "turtle":
-    //         this.enemyGroup.add(new Turtle({
-    //           scene: this,
-    //           key: 'mario-sprites',
-    //           x: 1200,
-    //           y: 100
-    //         }))
-    //         break
-    //       default:
-    //         console.error("Unknown:", this.tileset.tileProperties[enemy.gid - 1]);
-    //         break
-    //     }
-    //   }
-    // }
+    //       this.groundLayer.height
+    //       this.groundLayer.width
+        // switch (enemy) {
+        //   case "goomba":
+              this.enemyGroup.add(new Enemy({
+                scene: this,
+                key: 'sprites16',
+                x: Math.random() * this.groundLayer.width,
+                y: Math.random() * this.groundLayer.height - 16,
+                type: enemy,
+                details: enemies[enemy]
+              }))
+            // }
+    //         // enemyObject = new Goomba({
+    //         //   scene: this,
+    //         //   key: 'sprites16',
+    //         //   x: enemy.x,
+    //         //   y: enemy.y
+    //         // });
+        //     break
+        //   case "turtle":
+        //     this.enemyGroup.add(new Enemy({
+        //       scene: this,
+        //       key: 'mario-sprites',
+        //       x: Math.random() * this.groundLayer.width,
+        //       y: Math.random() * this.groundLayer.height - 16,
+        //       anims: 'turtle'
+        //     }))
+        //     break
+        //   default:
+        //     console.error("Unknown:", this.tileset.tileProperties[enemy.gid - 1]);
+        //     break
+        // }
+      }
+    }
 
     // A group powerUps to update
     this.powerUps = this.add.group();
@@ -457,13 +462,17 @@ class OverWorldScene extends Phaser.Scene {
 
     // need to keep this vvvvvvvvvvvvvvvvvvvv
 
+    // console.log('1')
+
     // Run the update method of Mario
     this.mario.update(this.keys, time, delta);
 
+    // console.log('2')
     // Run the update method of all enemies
     this.enemyGroup.children.entries.forEach(
       (sprite) => { sprite.update(time, delta); }
     )
+    // console.log('3')
     // Run the update method of non-enemy sprites
     this.powerUps.children.entries.forEach(
       (sprite) => { sprite.update(time, delta); }
@@ -636,6 +645,8 @@ class OverWorldScene extends Phaser.Scene {
   //   }
   // }
 
+
+// keep this for animations, attract mode, scenes and other stuff
   // record(delta) {
   //   let update;
   //   let keys = {

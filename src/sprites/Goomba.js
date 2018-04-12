@@ -8,16 +8,21 @@ export default class Goomba extends Enemy {
     this.killAt = 0;
   }
 
+  create(){
+  }
+
   update (time, delta) {
     // If it's not activated, then just skip the update method (see Enemy.js)
     if(!this.activated()){return;}
     this.scene.physics.world.collide(this, this.scene.groundLayer);
+    // might need to take this out incase it equals 0 at one point, which it may
     if(this.killAt !== 0){
       // The killtimer is set, keep the flat Goomba then kill it for good.
-      this.body.setVelocityX(0);
+      // this.body.setVelocityY(-500);
+      console.log(this.body.velocity)
       this.killAt-=delta;
       if(this.killAt < 0){
-        this.kill();
+        this.destroy();
       }
       return;
     }
@@ -48,11 +53,20 @@ export default class Goomba extends Enemy {
 
   getFlat(enemy,mario){
     enemy.play("goombaFlat");
-    enemy.body.setVelocityX(0);
-    enemy.body.acceleration.x = 0;
+    // enemy.body.setVelocityX(0);
+    // enemy.body.acceleration.x = 0;
     // Keep goomba flat for 500ms, then remove it.
     enemy.killAt = 500;
   }
 
+  kill(){
+    console.log(this.body.velocity)
+    this.killAt = 500
+    this.body.setVelocityY(-500)
+    this.flipY = true
+    this.alive = false
+    console.log(this.body.velocity)
+    // console.log(this)
+  }
 
 }

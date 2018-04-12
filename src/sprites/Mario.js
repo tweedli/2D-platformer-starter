@@ -4,8 +4,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
     this.acceleration = 1200;
-    this.body.maxVelocity.x = 400
-    this.body.maxVelocity.y = 500
+    this.body.maxVelocity.x = 300
+    this.body.maxVelocity.y = 300
     this.animSuffix = "";
     this.small();
     this.bending = false;
@@ -34,6 +34,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.firePerSec = 5
     this.lastFired = 0
     this.projFrequency = 1000 / this.firePerSec
+
+    this.damageTime  = 1000
+    this.damageTimer = 0
+    this.damaged = false
+
   }
 
   // maybe put constants somewhere??
@@ -293,7 +298,15 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
-
+    if(!this.damaged){
+      this.scene.physics.world.overlap(this, this.scene.enemyGroup, this.overlapEnemy.bind(this));
+    } else {
+      this.damageTimer += delta
+      if(this.damageTimer > this.damageTime){
+        this.damaged = false
+        this.damageTimer = 0
+      }
+    }
   }
 
   run(vel) {
@@ -450,6 +463,22 @@ export default class Player extends Phaser.GameObjects.Sprite {
     );
   }
 
+  overlapEnemy(player, enemy){
+    console.log('tile then sprite')
+    console.log(this)
+    console.log(player)
+    console.log(enemy)
+
+    console.log('health: ' + player.health)
+    player.body.setVelocity((enemy.body.velocity.x < 0 ? -1 : 1) * enemy.bumpDamage, enemy.bumpDamage * -10)
+    player.health = player.health - enemy.bumpDamage
+    if(player.health <= 0){
+      player.die()
+    } else {
+      player.damaged = true
+      this.scene.sound.playAudioSprite('sfx', 'smb_stomp');
+    }
+  }
 
 
 }

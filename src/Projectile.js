@@ -31,11 +31,13 @@ module.exports = Phaser.Class({
 
             // this.body.offset.set(22, 22)
             this.anims.play('bullet')
+            this.body.allowGravity = false
             // this.setAnchor(.5)
 
             this.dir = ''
             this.canBounce = false
             this.firedBy = ''
+            this.damage = 20
         },
 
         fire: function (x, y, dir, bodyVel, firedBy)
@@ -46,6 +48,7 @@ module.exports = Phaser.Class({
           // console.log(x + " " + y)
             this.setActive(true);
             this.setVisible(true);
+            this.body.enable = true
             // console.log(this.dir)
             // console.log(dir)
             this.body.velocity.x = 0
@@ -81,22 +84,31 @@ module.exports = Phaser.Class({
 
           this.setActive(false);
           this.setVisible(false);
+          this.body.enable = false
           // }
         },
 
-        impact: function(sprite, tile)
+        impact: function(projectile, impacted)
         { 
 
-          console.log(tile)
-          console.log(sprite)
-          console.log(this)
+          this.setActive(false);
+          this.setVisible(false);
+          this.body.enable = false
+          // console.log("impact!")
+          // console.log(impacted.body.velocity)
+          // console.log(projectile.body.velocity)
+          // console.log(this)
           // if(tile.index > 0){
+
+          // impacted.body.setVelocity(projectile.body.velocity.x, -500)
+
+            
+
+          impacted.damage(this.damage)
 
           this.body.drawDebug(this.scene.gfx)
           // tile.body.drawDebug(this.scene.gfx)
 
-          this.setActive(false);
-          this.setVisible(false);
           // }
         },
 
@@ -108,7 +120,7 @@ module.exports = Phaser.Class({
           //   this.x += this.speed * delta;
           // }
 
-          this.body.setGravity(0,0)
+          // this.body.setGravity(0,0)
           // console.log(this)
 
             
