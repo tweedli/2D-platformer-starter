@@ -25,5 +25,14 @@ module.exports = {
       goomba: 8,
       turtle: 4
     }
-  }
+  },
+  world1: {
+    map: "world1",
+    leftNeighbor: "",
+    rightNeighbor: "map2",
+    enemies: {
+      goomba: 30,
+      turtle: 16
+    },
+  },
 }
