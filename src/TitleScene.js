@@ -85,7 +85,7 @@ class TitleScene extends Phaser.Scene {
         if(this.startKey.isDown){
             this.scene.stop('OverWorldScene');
             // this.registry.set('attractMode', false);
-            this.scene.start('OverWorldScene', {tileMap: 'world1'})
+            this.scene.start('OverWorldScene', {tileMap: 'world1', from: false})
 
         }
 
@@ -93,8 +93,8 @@ class TitleScene extends Phaser.Scene {
     restartScene(){
         //        this.attractMode.stop();
         this.scene.stop('OverWorldScene');
-        this.scene.launch('OverWorldScene', {tileMap: 'world1'})
-        this.scene.bringToTop();
+        this.scene.launch('OverWorldScene', {tileMap: 'world1', from: false})
+        this.scene.bringToTop()
 
         this.registry.set('restartScene', false);
 

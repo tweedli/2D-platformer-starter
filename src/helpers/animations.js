@@ -24,6 +24,7 @@ export default function makeAnimations(scene) {
     scene.anims.create(config);
     config.key = "run";
     config.frames = scene.anims.generateFrameNumbers('mario', { start: 17, end: 19 }),
+    config.frameRate = 15,
         scene.anims.create(config);
     config = {
         key: 'jumpSuper',

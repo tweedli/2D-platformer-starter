@@ -66,7 +66,7 @@ module.exports = Phaser.Class({
 
             // maybe                 overlap???????
             this.scene.physics.add.collider(this, this.scene.groundLayer, this.collision.bind(this));
-            this.scene.physics.add.collider(this, this.scene.enemyGroup, this.impact.bind(this));
+            this.scene.physics.add.overlap(this, this.scene.enemyGroup, this.impact.bind(this));
 
         },
 
@@ -79,7 +79,7 @@ module.exports = Phaser.Class({
           // console.log(this)
           // if(tile.index > 0){
 
-          this.body.drawDebug(this.scene.gfx)
+          // turn on for collisions
           // tile.body.drawDebug(this.scene.gfx)
 
           this.setActive(false);
@@ -106,8 +106,8 @@ module.exports = Phaser.Class({
 
           impacted.damage(this.damage)
 
-          this.body.drawDebug(this.scene.gfx)
-          // tile.body.drawDebug(this.scene.gfx)
+          // turn on for impacts
+          // this.body.drawDebug(this.scene.gfx)
 
           // }
         },

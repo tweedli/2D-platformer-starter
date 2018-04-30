@@ -15,6 +15,6 @@ module.exports = {
     offsetY: 12,
     biDir: true,
     health: 50,
-    bumpDamage: 10
+    bumpDamage: 20
   }
 }

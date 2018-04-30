@@ -3,14 +3,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
     super(config.scene, config.x, config.y, config.key);
     config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
-    this.acceleration = 1200;
+    this.acceleration = 1200
     this.body.maxVelocity.x = 300
     this.body.maxVelocity.y = 300
-    this.animSuffix = "";
+    this.animSuffix = ""
     this.small();
-    this.bending = false;
-    this.wasHurt = -1;
-    this.flashToggle = false;
+    this.bending = false
+    this.wasHurt = -1
+    this.flashToggle = false
     this.star = {
       active: false,
       timer: -1,
@@ -35,16 +35,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.lastFired = 0
     this.projFrequency = 1000 / this.firePerSec
 
-    this.damageTime  = 1000
+    this.damageTime  = 500
     this.damageTimer = 0
     this.damaged = false
 
+    this.ammo = 50
+
+    this.tint
+    
+
   }
-
-  // maybe put constants somewhere??
-  // idk, maybe not
-
-
 
   update(keys, time, delta) {
 
@@ -55,12 +55,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.die()
       }
 
-
-      // this.body.drawDebug(this.scene.gfx)
+    // turn on to see vector + directional velocity
+    this.body.drawDebug(this.scene.gfx)
 
     if(this.x < 0){
       if(this.scene.leftNeighbor !== ""){
-        this.scene.scene.start('OverWorldScene', {tileMap: this.scene.leftNeighbor})
+        // this.scene.newMap(this.scene.leftNeighbor, this)
+        this.scene.scene.start('OverWorldScene', {tileMap: this.scene.leftNeighbor, from: 'right'})
       } else {
         if(this.alive) this.die()
       }
@@ -68,7 +69,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     
     if(this.x > this.scene.groundLayer.width - 16){
       if(this.scene.rightNeighbor !== ""){
-         this.scene.scene.start('OverWorldScene', {tileMap: this.scene.rightNeighbor})
+        // this.scene.newMap(this.scene.rightNeighbor, this)
+         this.scene.scene.start('OverWorldScene', {tileMap: this.scene.rightNeighbor, from: 'left'})
       } else {
         if(this.alive) this.die();
       }
@@ -79,7 +81,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
       
       //die
       this.scene.scene.start('TitleScene');
-
+      this.destroy()
+      // this.die() <-- will cause infinite loop
 
       //this.y = -32;
       //if(this.x<16){
@@ -129,23 +132,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
     ////////////////////
     ////////////////////
 
-    // star stuff
-    // if (this.star.active) {
-    //   if (this.star.timer < 0) {
-    //     this.star.active = false;
-    //     this.tint = 0xFFFFFF;
-    //   }
-    //   else {
-    //     this.star.timer -= delta;
-    //     this.star.step = (this.star.step === 5) ? 0 : this.star.step + 1;
-    //     this.tint = [0xFFFFFF, 0xFF0000, 0xFFFFFF, 0x00FF00, 0xFFFFFF, 0x0000FF][this.star.step];
-    //   }
-    // }
+
 
     // simplify this, dont need variable assignment in update
     let input = {
       left: keys.left.isDown,
       right: keys.right.isDown,
+      up: keys.up.isDown,
       down: keys.down.isDown,
       jump: keys.jump.isDown,
       shoot: keys.shoot.isDown
@@ -168,7 +161,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.run(-this.acceleration);
       }
       else {
-        this.run(-this.acceleration / 3);
+        this.run(-this.acceleration / 2);
       }
       this.flipX = true;
     }
@@ -178,7 +171,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.run(this.acceleration);
       }
       else {
-        this.run(this.acceleration / 3);
+        this.run(this.acceleration / 2);
       }
       this.flipX = false;
     }
@@ -289,12 +282,15 @@ export default class Player extends Phaser.GameObjects.Sprite {
       // console.log(this.scene.projectiles)
       let bullet = this.scene.projectiles.get();
       // console.log(bullet)
-      if(bullet){
+      if(bullet && this.ammo > 0){
         // console.log(this.body.x + " " + this.body.y)
         bullet.fire(this.body.x, this.body.y, this.flipX ? 'left' : 'right')
+        this.ammo--
         this.lastFired = time + this.projFrequency
+
+        this.scene.ammoText.text = 'AMMO ' + this.ammo
       } else {
-        console.log("no more projectiles!!")
+        console.log("no more projectiles!! out of ammo")
       }
     }
 
@@ -305,8 +301,31 @@ export default class Player extends Phaser.GameObjects.Sprite {
       if(this.damageTimer > this.damageTime){
         this.damaged = false
         this.damageTimer = 0
+        this.tint = 0xFFFFFF
       }
     }
+
+    // this.scene.physics.world.overlap(this, this.scene.exitLayer, this.exitWorld)
+
+
+
+    // star stuff
+    // if (this.star.active) {
+    //   if (this.star.timer < 0) {
+    //     this.star.active = false;
+    //     this.tint = 0xFFFFFF;
+    //   }
+    //   else {
+    //     this.star.timer -= delta;
+    if(this.damaged){
+      this.star.step = (this.star.step === 5) ? 0 : this.star.step + 1;
+      this.tint = [0xFFFFFF, 0xFF0000, 0xFFFFFF, 0x00FF00, 0xFFFFFF, 0x0000FF][Math.floor(this.star.step / 4)];
+    }
+    // }
+
+
+if(this.scene.exitLayer && input.up)
+      this.scene.physics.world.overlap(this, this.scene.exitLayer, this.scene.exitWorld.bind(this))
   }
 
   run(vel) {
@@ -324,7 +343,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // first jump just needs to be on ground
     if(this.body.blocked.down){
       this.body.setVelocityY(-200);
-      this.scene.sound.playAudioSprite('sfx', 'smb_jump-small');
+      this.scene.sound.playAudioSprite('sfx', 'smb_jump-small', {volume: .2});
       this.jumpTimer = 200;
       this.jumping = true;
     }
@@ -337,7 +356,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     if((this.jumping || !this.body.blocked.down) && !this.doubleJumped && (this.jumpTimer <= 0 || this.isFalling) && !this.jumpHold){
       this.body.setVelocityY(-300);
       this.doubleJumped = true
-      this.scene.sound.playAudioSprite('sfx', 'smb_jump-super');
+      this.scene.sound.playAudioSprite('sfx', 'smb_jump-super', {volume: .2});
     }
 
     // idk what this is
@@ -359,26 +378,26 @@ export default class Player extends Phaser.GameObjects.Sprite {
     
   }
 
-  hurtBy(enemy) {
-    if(!this.alive){
-      return;
-    }
-    if (this.star.active) {
-      enemy.starKilled(enemy, this);
-    }
-    else if (this.wasHurt < 1) {
-      if (this.animSuffix !== "") {
-        this.resize(false);
-        this.scene.sound.playAudioSprite('sfx', 'smb_pipe');
+  // hurtBy(enemy) {
+  //   if(!this.alive){
+  //     return;
+  //   }
+  //   if (this.star.active) {
+  //     enemy.starKilled(enemy, this);
+  //   }
+  //   else if (this.wasHurt < 1) {
+  //     if (this.animSuffix !== "") {
+  //       this.resize(false);
+  //       this.scene.sound.playAudioSprite('sfx', 'smb_pipe');
 
-        this.wasHurt = 2000;
-      }
-      else {
-        this.health = this.health - 10
-        // console.log(this.health)
-      }
-    }
-  }
+  //       this.wasHurt = 2000;
+  //     }
+  //     else {
+  //       this.health = this.health - 10
+  //       // console.log(this.health)
+  //     }
+  //   }
+  // }
 
   resize(large) {
     this.scene.physics.world.pause();
@@ -396,12 +415,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   small() {
     this.body.setSize(10, 10)
-    this.body.offset.set(3, 22);
+    this.body.offset.set(3, 22)
   }
 
   large() {
-    this.body.setSize(10, 22);
-    this.body.offset.set(3, 10);
+    this.body.setSize(10, 22)
+    this.body.offset.set(3, 10)
   }
 
   die() {
@@ -411,7 +430,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);
-    this.alive = false;
   }
 
   enterPipe(id, dir, init = true) {
@@ -472,7 +490,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     console.log('health: ' + player.health)
     player.body.setVelocity((enemy.body.velocity.x < 0 ? -1 : 1) * enemy.bumpDamage, enemy.bumpDamage * -10)
     player.health = player.health - enemy.bumpDamage
-    if(player.health <= 0){
+    player.health = player.health < 0 ? 0 : player.health
+    this.scene.healthText.text = 'HEALTH ' + player.health
+    if(player.health === 0){
       player.die()
     } else {
       player.damaged = true

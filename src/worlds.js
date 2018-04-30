@@ -29,10 +29,50 @@ module.exports = {
   world1: {
     map: "world1",
     leftNeighbor: "",
-    rightNeighbor: "map2",
+    rightNeighbor: "world2",
+    leftEntry: "",
+    rightEntry: "",
     enemies: {
       goomba: 30,
       turtle: 16
     },
+    entryPoint: "",
+    farBackground: true,
+    middleBackground: true,
+    groundLayer: true,
+    exitLayer: true,
+  },
+  world2: {
+    map: "world2",
+    leftNeighbor: "world1",
+    interiorNeighbor1: "interior1",
+    from: {
+      interior1: "151x38"
+    },
+    rightNeighbor: "",
+    leftEntry: "",
+    rightEntry: "",
+    enemies: {
+      goomba: 12,
+      turtle: 6
+    },
+    farBackground: true,
+    middleBackground: true,
+    groundLayer: true,
+    exitLayer: true,
+  },
+  interior1: {
+    map: "interior1",
+    leftNeighbor: "world2",
+    rightNeighbor: "",
+    leftEntry: "",
+    rightEntry: "",
+    enemies: {
+      goomba: 12,
+      turtle: 6
+    },
+    farBackground: false,
+    middleBackground: false,
+    exitLayer: false,
   },
 }
