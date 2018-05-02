@@ -35,9 +35,12 @@ class OverWorldScene extends Phaser.Scene {
 
         this.entryPoint = worlds[this.worldName].entryPoint
         this.from = this.scene.settings.data.from
+        this.fromDoor = this.scene.settings.data.fromDoor
 
         console.log(this.from)
         // this.pixelArt = true
+
+        this.createMario = this.scene.settings.data.createMario
 
     }
 
@@ -92,7 +95,7 @@ class OverWorldScene extends Phaser.Scene {
       });
       console.log("thismap")
       console.log(this.map)
-      this.tileset = this.map.addTilesetImage('super-mario-16bit', 'tiles-16bit');
+      this.tileset = this.map.addTilesetImage('super-mario-16bits', 'tiles-16bit');
 
       console.log(this.tileset)
 
@@ -146,7 +149,7 @@ class OverWorldScene extends Phaser.Scene {
       // CREATE MARIO!!!
       console.log(this.mario)
 
-      if(!this.mario){
+      if(this.createMario){
         // alert("newmario")
         this.mario = new Mario({
           scene: this,
@@ -156,6 +159,19 @@ class OverWorldScene extends Phaser.Scene {
         })
       } else {
         // alert("oldmario")
+        if(this.fromDoor){
+          this.mario.body.setVelocity(0,0)
+          this.mario.x = worlds[this.worldName][this.from + 'Entry'].x
+          this.mario.y = worlds[this.worldName][this.from + 'Entry'].y
+          this.physics.world.enable(this.mario)
+          this.add.existing(this.mario)
+        } else if(this.toOutside){
+          this.mario.body.setVelocity(0,0)
+          this.mario.x = worlds[this.worldName][this.from + 'Entry'].x
+          this.mario.y = worlds[this.worldName][this.from + 'Entry'].y
+          this.physics.world.enable(this.mario)
+          this.add.existing(this.mario)
+        } else {
         if(this.from === 'left'){
           this.mario.x = 8
           this.physics.world.enable(this.mario)
@@ -166,6 +182,7 @@ class OverWorldScene extends Phaser.Scene {
           this.add.existing(this.mario)
         } else {
 
+        }
         }
       }
       console.log(this.mario)
@@ -300,7 +317,7 @@ class OverWorldScene extends Phaser.Scene {
           // this.cameras.main.setSize(2000, 1200); // fixed size messes everything up, too small is bad,
           //                                           need to do more research ////////////////////////
       this.cameras.main.startFollow(this.mario)
-      this.cameras.main.setBackgroundColor('#2471A3'); //Blue sky
+      this.cameras.main.setBackgroundColor('#' + worlds[this.worldName].backgroundColor); //Blue sky
 
       console.log(this.cameras.main)
 
@@ -792,7 +809,7 @@ class OverWorldScene extends Phaser.Scene {
 
       console.log("need map here")
       console.log(this.map)
-      this.tileset = this.map.addTilesetImage('super-mario-16bit', 'tiles-16bit');
+      this.tileset = this.map.addTilesetImage('super-mario-16bits', 'tiles-16bit');
 
       console.log(this.tileset)
 
@@ -893,9 +910,10 @@ class OverWorldScene extends Phaser.Scene {
 
   exitWorld(player, tile){
     if(tile.index >= 0 && tile){
+      console.log("exit world")
       console.log(tile)
       this.scene.sound.playAudioSprite('sfx', 'smb_stomp');
-      this.scene.scene.start('OverWorldScene', {tileMap: tile.properties.to})
+      this.scene.scene.start('OverWorldScene', {tileMap: tile.properties.to, from: 'left', fromDoor: true})
       console.log("overlapping")
     }
 

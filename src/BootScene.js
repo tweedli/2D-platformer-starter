@@ -14,7 +14,7 @@ class BootScene extends Phaser.Scene {
         // I load the tiles as a spritesheet so I can use it for both sprites and tiles
         this.load.spritesheet('tiles', 'assets/images/super-mario.png', { frameWidth: 16, frameHeight: 16 });
         // Just for fun:
-        this.load.spritesheet('tiles-16bit', 'assets/images/super-mario-16bit.png', { frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet('tiles-16bit', 'assets/images/super-mario-16bits.png', { frameWidth: 16, frameHeight: 16, spacing:2, margin:1});
         // Spritesheets with fixed sizes. Should be replaced with atlas:
         this.load.spritesheet('mario', 'assets/images/mario-sprites.png', { frameWidth: 16, frameHeight: 32 });
         this.load.spritesheet('sprites16', 'assets/images/16x16sprites.png', { frameWidth: 16, frameHeight: 16 });

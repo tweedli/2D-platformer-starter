@@ -56,7 +56,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
 
     // turn on to see vector + directional velocity
-    this.body.drawDebug(this.scene.gfx)
+    // this.body.drawDebug(this.scene.gfx)
 
     if(this.x < 0){
       if(this.scene.leftNeighbor !== ""){
@@ -67,7 +67,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
     
-    if(this.x > this.scene.groundLayer.width - 16){
+    if(this.x > this.scene.groundLayer.width - 8){
       if(this.scene.rightNeighbor !== ""){
         // this.scene.newMap(this.scene.rightNeighbor, this)
          this.scene.scene.start('OverWorldScene', {tileMap: this.scene.rightNeighbor, from: 'left'})
@@ -81,7 +81,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
       
       //die
       this.scene.scene.start('TitleScene');
-      this.destroy()
       // this.die() <-- will cause infinite loop
 
       //this.y = -32;
@@ -324,8 +323,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     // }
 
 
-if(this.scene.exitLayer && input.up)
-      this.scene.physics.world.overlap(this, this.scene.exitLayer, this.scene.exitWorld.bind(this))
+  if(this.scene.exitLayer && input.up)
+    this.scene.physics.world.overlap(this, this.scene.exitLayer, this.scene.exitWorld.bind(this))
   }
 
   run(vel) {
@@ -430,6 +429,7 @@ if(this.scene.exitLayer && input.up)
 
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);
+    this.alive = false;
   }
 
   enterPipe(id, dir, init = true) {

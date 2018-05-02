@@ -6,7 +6,7 @@
          "name":"groundLayer",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":400,
          "x":0,
          "y":0
@@ -17,7 +17,7 @@
          "name":"background",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":400,
          "x":0,
          "y":0
@@ -53,21 +53,17 @@
         {
          "columns":11,
          "firstgid":1,
-         "image":"..\/images\/super-mario-16bit.png",
-         "imageheight":80,
-         "imagewidth":176,
-         "margin":0,
-         "name":"super-mario-16bit",
-         "spacing":0,
+         "image":"..\/images\/super-mario-16bits.png",
+         "imageheight":90,
+         "imagewidth":198,
+         "margin":1,
+         "name":"super-mario-16bits",
+         "spacing":2,
          "tilecount":55,
          "tileheight":16,
          "tileproperties":
             {
              "14":
-                {
-                 "collide":true
-                },
-             "23":
                 {
                  "collide":true
                 },
@@ -79,10 +75,6 @@
          "tilepropertytypes":
             {
              "14":
-                {
-                 "collide":"bool"
-                },
-             "23":
                 {
                  "collide":"bool"
                 },
