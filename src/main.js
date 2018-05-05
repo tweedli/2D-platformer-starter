@@ -7,9 +7,11 @@ import TitleScene from './TitleScene';
 let config = {
     type: Phaser.WEBGL,
     parent: 'content',
-    width: 500,
-    height: 300,
-    pixelArt:true,
+    width: 800,
+    height: 480,
+    // width: 500,
+    // height: 300,  <-- possible setting???
+    // pixelArt:true,
     physics: {
         default: 'arcade',
         arcade: {

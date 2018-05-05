@@ -27,7 +27,7 @@ class TitleScene extends Phaser.Scene {
       }
       this.anims.create(config);
     
-      this.title = this.add.sprite(this.sys.game.config.width/2-176/2, 48);
+      this.title = this.add.sprite(this.sys.game.config.width/2, 100);
       this.title.play("title");
       // this.attractMode = this.scene.launch('OverWorldScene');
       // console.log(this.attractMode.stop);
@@ -59,7 +59,7 @@ class TitleScene extends Phaser.Scene {
       el.style.height = ch*0.8+"px";
       console.log(cw,ch);
 
-      this.pressX = this.add.bitmapText(14 * 8, 8*16, 'font', "PRESS X TO START", 8);
+      this.pressX = this.add.bitmapText(this.sys.game.config.width / 2 - 86, 200, 'font', "PRESS X TO START\n\nPRESS A TO JUMP\n\nPRESS S TO SHOOT", 8);
       this.blink = 1000;
 
       this.startKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);

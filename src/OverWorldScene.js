@@ -41,11 +41,18 @@ class OverWorldScene extends Phaser.Scene {
         // this.pixelArt = true
 
         this.createMario = this.scene.settings.data.createMario
+        this.fromInside = this.scene.settings.data.fromInside
+
+        this.leftToOutside = worlds[this.worldName].leftToOutside
+        this.rightToOutside = worlds[this.worldName].rightToOutside
+
+        this.world = worlds[this.worldName]
 
     }
 
     create() {
       console.log("cleaning up")
+
           // this.cleanUp(); // necessary??
 
       // console.log(this)
@@ -61,6 +68,8 @@ class OverWorldScene extends Phaser.Scene {
       // else {
       // this.attractMode = null;
       // }
+
+      this.cameras.main.fadeIn(500)
 
       console.log(this.worldName)
       console.log(this.leftNeighbor)
@@ -110,7 +119,23 @@ class OverWorldScene extends Phaser.Scene {
       this.exitLayer = this.map.createDynamicLayer('exitLayer', this.tileset, 0, 0)
 
 
+      console.log("this.groundLayer")
+      console.log("this.groundLayer")
+      console.log("this.groundLayer")
+      console.log("this.groundLayer")
+      console.log("this.groundLayer")
+      console.log("this.groundLayer")
+      console.log("this.groundLayer")
+      console.log("this.groundLayer")
+      console.log("this.groundLayer")
+      console.log("this.groundLayer")
       console.log(this.groundLayer)
+
+      this.groundLayer.filterTiles(function(item){
+        if(item.properties.collideDown === true)
+        item.setCollision(false, false, true, false)
+      })
+
           // We got the map. Tell animated tiles plugin to loop through the tileset properties and get ready.
           // We don't need to do anything beyond this point for animated tiles to work.
       this.sys.animatedTiles.init(this.map);
@@ -157,6 +182,7 @@ class OverWorldScene extends Phaser.Scene {
           x: this.groundLayer.width - 24, // 3500, 
           y: this.groundLayer.height - 16 - 16
         })
+        this.cameras.main.fadeIn(500)
       } else {
         // alert("oldmario")
         if(this.fromDoor){
@@ -165,10 +191,10 @@ class OverWorldScene extends Phaser.Scene {
           this.mario.y = worlds[this.worldName][this.from + 'Entry'].y
           this.physics.world.enable(this.mario)
           this.add.existing(this.mario)
-        } else if(this.toOutside){
+        } else if(this.fromInside){
           this.mario.body.setVelocity(0,0)
-          this.mario.x = worlds[this.worldName][this.from + 'Entry'].x
-          this.mario.y = worlds[this.worldName][this.from + 'Entry'].y
+          this.mario.x = this.fromInside.x
+          this.mario.y = this.fromInside.y
           this.physics.world.enable(this.mario)
           this.add.existing(this.mario)
         } else {
@@ -180,7 +206,7 @@ class OverWorldScene extends Phaser.Scene {
           this.mario.x = this.groundLayer.width - 16
           this.physics.world.enable(this.mario)
           this.add.existing(this.mario)
-        } else {
+        } else /*if(this.from === 'inside')*/{
 
         }
         }
@@ -311,6 +337,13 @@ class OverWorldScene extends Phaser.Scene {
 
       console.log(this.groundLayer.height)
       console.log(this.groundLayer.width)
+
+      if(this.sys.game.config.width > this.groundLayer.width){
+
+      }
+      if(this.sys.game.config.height > this.groundLayer.height){
+
+      }
 
       this.cameras.main.setBounds(0, 0, this.groundLayer.width, this.groundLayer.height)
           // this.cameras.main.setSize() // maybe not have a fixed size?
@@ -459,6 +492,7 @@ class OverWorldScene extends Phaser.Scene {
 
       this.healthText = this.add.bitmapText(20, 8, 'font', 'HEALTH ' + this.mario.health).setScrollFactor(0)
       this.ammoText = this.add.bitmapText(20, 24, 'font', 'AMMO ' + this.mario.ammo).setScrollFactor(0)
+
     }
 
     update(time, delta) {
@@ -908,11 +942,23 @@ class OverWorldScene extends Phaser.Scene {
       console.log("where???")
     }
 
+  fadeOutAndStart(scene, config){
+    let self = this
+          this.physics.world.pause();
+
+    this.cameras.main.fadeOut(500, function(uhh){
+      // alert('what?')
+      // alert('what?')
+      self.scene.start(scene, config)
+    })
+  }
+
   exitWorld(player, tile){
     if(tile.index >= 0 && tile){
       console.log("exit world")
       console.log(tile)
       this.scene.sound.playAudioSprite('sfx', 'smb_stomp');
+      this.scene.fadeOut()
       this.scene.scene.start('OverWorldScene', {tileMap: tile.properties.to, from: 'left', fromDoor: true})
       console.log("overlapping")
     }

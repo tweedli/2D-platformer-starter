@@ -40,7 +40,7 @@ module.exports = {
     farBackground: true,
     middleBackground: true,
     groundLayer: true,
-    exitLayer: true,
+    exitLayer: false,
     backgroundColor: '2471A3'
   },
   world2: {
@@ -68,6 +68,8 @@ module.exports = {
     leftNeighbor: "world2",
     rightNeighbor: "",
     leftEntry: {x:8, y:344},
+    leftToOutside:true,
+    leftExit: {x:2416, y:600},
     rightEntry: "",
     enemies: {
       goomba: 12,
@@ -76,6 +78,7 @@ module.exports = {
     farBackground: false,
     middleBackground: false,
     exitLayer: false,
-    backgroundColor: '000000'
+    backgroundColor: '000000',
+    leftToOutside: true
   },
 }

@@ -41,8 +41,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     this.ammo = 50
 
-    this.tint
-    
 
   }
 
@@ -60,8 +58,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     if(this.x < 0){
       if(this.scene.leftNeighbor !== ""){
-        // this.scene.newMap(this.scene.leftNeighbor, this)
-        this.scene.scene.start('OverWorldScene', {tileMap: this.scene.leftNeighbor, from: 'right'})
+
+        if(this.scene.leftToOutside){
+          this.scene.scene.start('OverWorldScene', {tileMap: this.scene.leftNeighbor, fromInside:this.scene.world.leftExit})
+        } else {
+          this.scene.scene.start('OverWorldScene', {tileMap: this.scene.leftNeighbor, from: 'right'})
+        }
       } else {
         if(this.alive) this.die()
       }
@@ -70,9 +72,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
     if(this.x > this.scene.groundLayer.width - 8){
       if(this.scene.rightNeighbor !== ""){
         // this.scene.newMap(this.scene.rightNeighbor, this)
-         this.scene.scene.start('OverWorldScene', {tileMap: this.scene.rightNeighbor, from: 'left'})
+        
+        if(this.scene.rightToOutside){
+          this.scene.scene.start('OverWorldScene', {tileMap: this.scene.rightNeighbor, fromInside:this.scene.world.rightExit})
+        } else {
+          this.scene.scene.start('OverWorldScene', {tileMap: this.scene.rightNeighbor, from: 'left'})
+        }
       } else {
-        if(this.alive) this.die();
+        if(this.alive) this.die()
       }
     }
 
