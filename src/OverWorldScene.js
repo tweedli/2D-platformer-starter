@@ -179,10 +179,10 @@ class OverWorldScene extends Phaser.Scene {
         this.mario = new Mario({
           scene: this,
           key: 'mario',
-          x: this.groundLayer.width - 24, // 3500, 
+          x: 24, // 3500, 
           y: this.groundLayer.height - 16 - 16
         })
-        this.cameras.main.fadeIn(500)
+        this.cameras.main.fadeIn(333)
       } else {
         // alert("oldmario")
         if(this.fromDoor){
@@ -942,27 +942,11 @@ class OverWorldScene extends Phaser.Scene {
       console.log("where???")
     }
 
-  fadeOutAndStart(scene, config){
-    let self = this
-          this.physics.world.pause();
-
-    this.cameras.main.fadeOut(500, function(uhh){
-      // alert('what?')
-      // alert('what?')
-      self.scene.start(scene, config)
-    })
-  }
-
   exitWorld(player, tile){
     if(tile.index >= 0 && tile){
-      console.log("exit world")
-      console.log(tile)
       this.scene.sound.playAudioSprite('sfx', 'smb_stomp');
-      this.scene.fadeOut()
       this.scene.scene.start('OverWorldScene', {tileMap: tile.properties.to, from: 'left', fromDoor: true})
-      console.log("overlapping")
     }
-
   }
 
     cleanUp() {

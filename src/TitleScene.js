@@ -54,10 +54,10 @@ class TitleScene extends Phaser.Scene {
           ch = sh;
       }
       let el = document.getElementsByTagName('canvas')[0];
-      console.log(el);
-      el.style.width = cw*0.8+"px";
-      el.style.height = ch*0.8+"px";
-      console.log(cw,ch);
+      // console.log(el);
+      el.style.width = cw*0.9+"px";
+      el.style.height = ch*0.9+"px";
+      // console.log(cw,ch);
 
       this.pressX = this.add.bitmapText(this.sys.game.config.width / 2 - 86, 200, 'font', "PRESS X TO START\n\nPRESS A TO JUMP\n\nPRESS S TO SHOOT", 8);
       this.blink = 1000;

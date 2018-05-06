@@ -10,7 +10,7 @@ let config = {
     width: 800,
     height: 480,
     // width: 500,
-    // height: 300,  <-- possible setting???
+    // height: 300, // <-- possible setting???
     // pixelArt:true,
     physics: {
         default: 'arcade',
