@@ -46,15 +46,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
   update(keys, time, delta) {
 
-    // If Mario falls down a cliff or died, just let him drop from the sky and prentend like nothing happened
-
-      // console.log(this.health)
       if(this.health <= 0 && this.alive){
         this.die()
       }
 
-    // turn on to see vector + directional velocity
-    // this.body.drawDebug(this.scene.gfx)
 
     if(this.x < 0){
       if(this.scene.leftNeighbor !== ""){
@@ -71,7 +66,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     
     if(this.x > this.scene.groundLayer.width - 8){
       if(this.scene.rightNeighbor !== ""){
-        // this.scene.newMap(this.scene.rightNeighbor, this)
         
         if(this.scene.rightToOutside){
           this.scene.scene.start('OverWorldScene', {tileMap: this.scene.rightNeighbor, fromInside:this.scene.world.rightExit})
@@ -83,23 +77,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
-    //somehow gotten below the map.
     if (this.y > this.scene.groundLayer.height) {
       
-      //die
       this.scene.scene.start('TitleScene');
-      // this.die() <-- will cause infinite loop
-
-      //this.y = -32;
-      //if(this.x<16){
-      //  this.x = 16;
-     // }
-      //this.alive = true;
-      //this.scene.music.seek = 0;
-      //this.scene.music.play();
-    }else if(this.scene.groundLayer.height > 240 && this.alive){
-      // this.die();
-
     }
 
 
@@ -206,7 +186,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     if(!input.left && !input.right && !input.jump && this.body.blocked.down){
       //not using right now, handled in the input handler.
-      // this.body.velocity.x = 0
     }
 
     ////////////////////
@@ -214,7 +193,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     ////////////////////
 
     // we subtract from the the jump timer if we are jumping.
-    // 
     if(this.jumpTimer > 0 && this.jumping){
       // console.log(this.jumpTimer)
       this.jumpTimer -= delta
@@ -311,23 +289,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
 
-    // this.scene.physics.world.overlap(this, this.scene.exitLayer, this.exitWorld)
-
-
-
-    // star stuff
-    // if (this.star.active) {
-    //   if (this.star.timer < 0) {
-    //     this.star.active = false;
-    //     this.tint = 0xFFFFFF;
-    //   }
-    //   else {
-    //     this.star.timer -= delta;
     if(this.damaged){
       this.star.step = (this.star.step === 5) ? 0 : this.star.step + 1;
       this.tint = [0xFFFFFF, 0xFF0000, 0xFFFFFF, 0x00FF00, 0xFFFFFF, 0x0000FF][Math.floor(this.star.step / 4)];
     }
-    // }
 
 
   if(this.scene.exitLayer && input.up)
@@ -339,9 +304,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   jump() {
-    // console.log(this.jumping)
-    // console.log(this.doubleJumped)
-    // console.log("jumping")
     if (!this.body.blocked.down && !this.jumping && this.doubleJumped) {
       return;
     }
@@ -354,25 +316,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.jumping = true;
     }
       
-    // if(!this.jumping){
-    //   this.jumping = true;
-    // }
-
     // second jump needs to be
     if((this.jumping || !this.body.blocked.down) && !this.doubleJumped && (this.jumpTimer <= 0 || this.isFalling) && !this.jumpHold){
       this.body.setVelocityY(-300);
       this.doubleJumped = true
       this.scene.sound.playAudioSprite('sfx', 'smb_jump-super', {volume: .2});
     }
-
-    // idk what this is
-    // if(!this.jumping){
-    //   if(this.animSuffix===""){
-    //   }
-    //   else {
-    //   }
-    // }
-
   }
 
   enemyBounce(enemy) {
@@ -384,49 +333,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
     
   }
 
-  // hurtBy(enemy) {
-  //   if(!this.alive){
-  //     return;
-  //   }
-  //   if (this.star.active) {
-  //     enemy.starKilled(enemy, this);
-  //   }
-  //   else if (this.wasHurt < 1) {
-  //     if (this.animSuffix !== "") {
-  //       this.resize(false);
-  //       this.scene.sound.playAudioSprite('sfx', 'smb_pipe');
-
-  //       this.wasHurt = 2000;
-  //     }
-  //     else {
-  //       this.health = this.health - 10
-  //       // console.log(this.health)
-  //     }
-  //   }
-  // }
-
-  resize(large) {
-    this.scene.physics.world.pause();
-    if (large) {
-      this.large();
-      this.animSuffix = "Super";
-      this.play("grow");
-    }
-    else {
-      this.small();
-      this.animSuffix = "";
-      this.play("shrink");
-    }
-  }
 
   small() {
     this.body.setSize(10, 10)
     this.body.offset.set(3, 22)
-  }
-
-  large() {
-    this.body.setSize(10, 22)
-    this.body.offset.set(3, 10)
   }
 
   die() {
@@ -439,62 +349,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.alive = false;
   }
 
-  enterPipe(id, dir, init = true) {
-
-    if (init) {
-      if (this.animSuffix === "") {
-        this.play("stand");
-      }
-      else {
-        this.play("bend" + this.animSuffix);
-      }
-      this.scene.sound.playAudioSprite('sfx', 'smb_pipe');
-
-      this.enteringPipe = true;
-      this.body.setVelocity(0);
-      this.body.setAcceleration(0);
-      this.setDepth(-100);
-      this.scene.tweens.add({
-        targets: this,
-        y: this.y + 40,
-        duration: 800,
-        onComplete: function () {
-          console.log(this.targets, id, dir); console.log(id); console.log(dir); this.targets[0].enterPipe(id, dir, false);
-        },
-      });
-
-    }
-    else {
-      this.setDepth(1);
-      this.enteringPipe = false;
-      this.x = this.scene.destinations[id].x;
-      this.y = this.scene.destinations[id].top ? -100 : 100;
-      this.setRoomBounds(this.scene.rooms);
-    }
-  }
-
-  setRoomBounds(rooms){
-    rooms.forEach(
-      (room) => {
-        if (this.x >= room.x && this.x <= (room.x + room.width)) {
-          let cam = this.scene.cameras.main;
-          let layer = this.scene.groundLayer;
-          cam.setBounds(room.x, 0, room.width * layer.scaleX, layer.height * layer.scaleY);
-          this.scene.finishLine.active = (room.x===0);
-          this.scene.cameras.main.setBackgroundColor(room.sky);
-          return;
-        }
-      }
-    );
-  }
-
   overlapEnemy(player, enemy){
-    console.log('tile then sprite')
-    console.log(this)
-    console.log(player)
-    console.log(enemy)
-
-    console.log('health: ' + player.health)
     player.body.setVelocity((enemy.body.velocity.x < 0 ? -1 : 1) * enemy.bumpDamage, enemy.bumpDamage * -10)
     player.health = player.health - enemy.bumpDamage
     player.health = player.health < 0 ? 0 : player.health

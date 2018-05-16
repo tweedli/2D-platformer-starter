@@ -29,8 +29,6 @@ class TitleScene extends Phaser.Scene {
     
       this.title = this.add.sprite(this.sys.game.config.width/2, 100);
       this.title.play("title");
-      // this.attractMode = this.scene.launch('OverWorldScene');
-      // console.log(this.attractMode.stop);
 
       this.scene.bringToTop();
 
@@ -68,20 +66,10 @@ class TitleScene extends Phaser.Scene {
     update(time, delta)
     {
         if(this.registry.get('restartScene')){
-            this.restartScene();
+          this.restartScene();
 
         }
-        // this.blink-=delta;
-        // if(this.blink<0){
-        //     this.pressX.alpha = this.pressX.alpha === 1 ? 0 : 1;
-        //     this.blink = 500;
-        // }
 
-        // console.log(delta)
-        // console.log(time)
-
-        // if(!this.registry.get('attractMode')){
-        // }
         if(this.startKey.isDown){
             this.scene.stop('OverWorldScene');
             // this.registry.set('attractMode', false);
@@ -90,8 +78,8 @@ class TitleScene extends Phaser.Scene {
         }
 
     }
+
     restartScene(){
-        //        this.attractMode.stop();
         this.scene.stop('OverWorldScene');
         this.scene.launch('OverWorldScene', {tileMap: 'world1', from: false, createMario: true})
         this.scene.bringToTop()
